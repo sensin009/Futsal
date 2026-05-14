@@ -28,6 +28,11 @@ class PlayerProfile(Base):
     total_matches: Mapped[int] = mapped_column(Integer, default=0)
     yellow_cards: Mapped[int] = mapped_column(Integer, default=0)
     red_cards: Mapped[int] = mapped_column(Integer, default=0)
+    
+    team_id: Mapped[int | None] = mapped_column(
+        ForeignKey("teams.id", ondelete="SET NULL"), nullable=True, index=True
+    )
 
     user = relationship("User", back_populates="player_profile")
+    team = relationship("Team")
 

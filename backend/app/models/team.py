@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from sqlalchemy import Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 
@@ -19,4 +19,6 @@ class Team(Base):
     losses: Mapped[int] = mapped_column(Integer, default=0)
     goals_for: Mapped[int] = mapped_column(Integer, default=0)
     goals_against: Mapped[int] = mapped_column(Integer, default=0)
+
+    player_profiles = relationship("PlayerProfile", back_populates="team")
 

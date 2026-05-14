@@ -14,6 +14,7 @@ class UserOut(BaseModel):
     role: UserRole
     status: UserStatus
     is_blocked: bool
+    team_id: int | None = None
     created_at: datetime
 
     class Config:
@@ -25,4 +26,5 @@ class UserUpdateAdmin(BaseModel):
     role: UserRole | None = None
     status: UserStatus | None = None
     is_blocked: bool | None = None
+    team_id: int | None = None
 

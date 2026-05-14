@@ -28,7 +28,11 @@ def update_user(
         raise HTTPException(status_code=404, detail="User not found")
 
     for field, value in payload.model_dump(exclude_unset=True).items():
-        setattr(user, field, value)
+        if field == "team_id":
+            if user.player_profile:
+                user.player_profile.team_id = value
+        else:
+            setattr(user, field, value)
 
     db.commit()
     db.refresh(user)
