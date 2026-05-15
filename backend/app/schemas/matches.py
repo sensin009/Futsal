@@ -4,7 +4,24 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
-from app.models.enums import MatchStatus
+from app.models.enums import MatchStatus, MatchEventType
+
+
+class MatchEventOut(BaseModel):
+    id: int
+    match_id: int
+    player_id: int | None
+    team_id: int
+    event_type: MatchEventType
+    minute: int
+    description: str | None
+    created_at: datetime
+    
+    player_name: str | None = None
+    team_name: str | None = None
+
+    class Config:
+        from_attributes = True
 
 
 class MatchOut(BaseModel):
@@ -17,6 +34,9 @@ class MatchOut(BaseModel):
     team_b_score: int | None
     status: MatchStatus
     man_of_the_match_user_id: int | None = None
+    team_a_name: str | None = None
+    team_b_name: str | None = None
+    events: list[MatchEventOut] = []
 
     class Config:
         from_attributes = True
@@ -40,4 +60,12 @@ class MatchUpdate(BaseModel):
     team_a_score: int | None = Field(default=None, ge=0, le=99)
     team_b_score: int | None = Field(default=None, ge=0, le=99)
     man_of_the_match_user_id: int | None = None
+
+
+class MatchEventCreate(BaseModel):
+    player_id: int | None = None
+    team_id: int
+    event_type: MatchEventType
+    minute: int = Field(ge=0, le=120)
+    description: str | None = Field(default=None, max_length=255)
 

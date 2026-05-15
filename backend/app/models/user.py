@@ -27,3 +27,7 @@ class User(Base):
     def team_id(self) -> int | None:
         return self.player_profile.team_id if self.player_profile else None
 
+    @property
+    def photo(self) -> str | None:
+        return self.player_profile.photo if self.player_profile else None
+

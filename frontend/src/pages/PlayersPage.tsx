@@ -4,6 +4,7 @@ import { Card } from "../components/ui/Card";
 import { Badge } from "../components/ui/Badge";
 import { motion } from "framer-motion";
 import { Users, User, Shield, Target, Activity } from "lucide-react";
+import { getImageUrl } from "../utils/images";
 
 type PlayerRow = {
   user_id: number;
@@ -39,7 +40,7 @@ export function PlayersPage() {
   }, []);
 
   return (
-    <motion.div 
+    <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -65,7 +66,7 @@ export function PlayersPage() {
                 <div className="absolute inset-0 bg-pitch-pattern opacity-20" />
                 <div className="absolute -bottom-6 left-6 h-20 w-20 rounded-2xl bg-navy border-4 border-navy-light shadow-xl overflow-hidden flex items-center justify-center">
                   {p.photo ? (
-                    <img src={p.photo} alt={p.name} className="h-full w-full object-cover" />
+                    <img src={getImageUrl(p.photo)!} alt={p.name} className="h-full w-full object-cover" />
                   ) : (
                     <User className="h-10 w-10 text-white/20" />
                   )}
@@ -76,7 +77,7 @@ export function PlayersPage() {
                   </div>
                 )}
               </div>
-              
+
               <div className="px-6 pb-6 pt-10">
                 <div className="flex items-start justify-between mb-4">
                   <div>

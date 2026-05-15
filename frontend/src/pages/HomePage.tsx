@@ -13,14 +13,18 @@ import {
   Target, 
   ShieldCheck, 
   Zap,
-  ArrowRight
+  ArrowRight,
+  MapPin
 } from "lucide-react";
+import { getImageUrl } from "../utils/images";
 
 type HomeData = {
   upcoming_match: null | {
     id: number;
     team_a_name: string;
     team_b_name: string;
+    team_a_score?: number;
+    team_b_score?: number;
     match_date: string;
     venue: string;
     status: string;
@@ -159,23 +163,35 @@ export function HomePage() {
             {!data && !err && <div className="h-24 animate-pulse rounded-lg bg-white/5" />}
             
             {data?.upcoming_match && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="text-center flex-1">
-                    <p className="text-sm font-bold text-white/40 mb-2 truncate uppercase tracking-tighter">Team A</p>
-                    <p className="text-lg font-black text-white leading-tight">{data.upcoming_match.team_a_name}</p>
+              <Link to={`/matches/${data.upcoming_match.id}`} className="block group">
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="text-center flex-1">
+                      <p className="text-sm font-bold text-white/40 mb-2 truncate uppercase tracking-tighter">Team A</p>
+                      <p className="text-lg font-black text-white leading-tight group-hover:text-accent transition-colors">{data.upcoming_match.team_a_name}</p>
+                    </div>
+                    <div className="flex flex-col items-center gap-1">
+                      {data.upcoming_match.status === 'live' ? (
+                        <div className="flex items-center gap-2">
+                          <span className="text-2xl font-black text-white">{data.upcoming_match.team_a_score}</span>
+                          <span className="text-xs font-black text-accent animate-pulse">LIVE</span>
+                          <span className="text-2xl font-black text-white">{data.upcoming_match.team_b_score}</span>
+                        </div>
+                      ) : (
+                        <div className="px-3 py-1 rounded bg-white/5 border border-white/10 font-black text-gold italic">VS</div>
+                      )}
+                    </div>
+                    <div className="text-center flex-1">
+                      <p className="text-sm font-bold text-white/40 mb-2 truncate uppercase tracking-tighter">Team B</p>
+                      <p className="text-lg font-black text-white leading-tight group-hover:text-accent transition-colors">{data.upcoming_match.team_b_name}</p>
+                    </div>
                   </div>
-                  <div className="px-3 py-1 rounded bg-white/5 border border-white/10 font-black text-gold italic">VS</div>
-                  <div className="text-center flex-1">
-                    <p className="text-sm font-bold text-white/40 mb-2 truncate uppercase tracking-tighter">Team B</p>
-                    <p className="text-lg font-black text-white leading-tight">{data.upcoming_match.team_b_name}</p>
+                  <div className="pt-4 border-t border-white/5 flex items-center justify-between text-sm">
+                    <span className="text-white/40">{new Date(data.upcoming_match.match_date).toLocaleDateString()}</span>
+                    <span className="text-white/40 flex items-center gap-1"><MapPin className="h-3 w-3" /> {data.upcoming_match.venue}</span>
                   </div>
                 </div>
-                <div className="pt-4 border-t border-white/5 flex items-center justify-between text-sm">
-                  <span className="text-white/40">{new Date(data.upcoming_match.match_date).toLocaleDateString()}</span>
-                  <span className="text-white/40">{data.upcoming_match.venue}</span>
-                </div>
-              </div>
+              </Link>
             )}
             {data && !data.upcoming_match && (
               <p className="text-white/40 italic">No scheduled matches at the moment.</p>
@@ -190,22 +206,25 @@ export function HomePage() {
               Latest Result
             </h2>
             {data?.latest_result ? (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between bg-white/5 rounded-2xl p-4 border border-white/5">
-                  <div className="text-center">
-                    <p className="text-xs font-bold text-white/40 uppercase mb-1">{data.latest_result.team_a_name}</p>
-                    <span className="text-4xl font-black text-accent">{data.latest_result.team_a_score ?? "0"}</span>
+              <Link to={`/matches/${data.latest_result.id}`} className="block group">
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between bg-white/5 rounded-2xl p-4 border border-white/5 group-hover:border-white/10 transition-colors">
+                    <div className="text-center">
+                      <p className="text-xs font-bold text-white/40 uppercase mb-1">{data.latest_result.team_a_name}</p>
+                      <span className="text-4xl font-black text-accent">{data.latest_result.team_a_score ?? "0"}</span>
+                    </div>
+                    <div className="h-10 w-[1px] bg-white/10" />
+                    <div className="text-center">
+                      <p className="text-xs font-black text-white/40 uppercase mb-1">{data.latest_result.team_b_name}</p>
+                      <span className="text-4xl font-black text-white">{data.latest_result.team_b_score ?? "0"}</span>
+                    </div>
                   </div>
-                  <div className="h-10 w-[1px] bg-white/10" />
-                  <div className="text-center">
-                    <p className="text-xs font-bold text-white/40 uppercase mb-1">{data.latest_result.team_b_name}</p>
-                    <span className="text-4xl font-black text-accent">{data.latest_result.team_b_score ?? "0"}</span>
+                  <div className="flex items-center justify-between text-xs font-bold text-white/20 uppercase tracking-widest px-1">
+                    <span>Full Time</span>
+                    <span>View Highlights</span>
                   </div>
                 </div>
-                <Link to="/schedule" className="group flex items-center gap-2 text-sm font-bold text-white/60 hover:text-white transition-colors">
-                  View full history <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </div>
+              </Link>
             ) : (
               <p className="text-white/40 italic">Waiting for the first whistle.</p>
             )}
@@ -225,14 +244,23 @@ export function HomePage() {
                   className="flex items-center justify-between rounded-xl bg-white/5 p-3 border border-transparent hover:border-white/10 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-navy-light text-xs font-bold text-white/60">
-                      {i + 1}
+                    <div className="h-10 w-10 rounded-xl bg-navy-light overflow-hidden border border-white/10">
+                      {p.photo ? (
+                        <img src={getImageUrl(p.photo)!} alt={p.name} className="h-full w-full object-cover" />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-xs font-bold text-white/20">
+                          {p.name[0]}
+                        </div>
+                      )}
                     </div>
-                    <span className="font-bold text-white">{p.name}</span>
+                    <div>
+                      <p className="font-bold text-white">{p.name}</p>
+                      <p className="text-[10px] text-white/30 uppercase">{p.position || "Forward"}</p>
+                    </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs font-bold text-accent">{p.goals} Goals</p>
-                    <p className="text-[10px] text-white/30 uppercase">{p.position || "Forward"}</p>
+                    <p className="text-sm font-black text-accent">{p.goals}</p>
+                    <p className="text-[10px] text-white/20 uppercase">Goals</p>
                   </div>
                 </div>
               ))}

@@ -36,3 +36,7 @@ class PlayerProfile(Base):
     user = relationship("User", back_populates="player_profile")
     team = relationship("Team")
 
+    @property
+    def team_name(self) -> str | None:
+        return self.team.team_name if self.team else None
+

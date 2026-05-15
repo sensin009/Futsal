@@ -15,6 +15,7 @@ class UserOut(BaseModel):
     status: UserStatus
     is_blocked: bool
     team_id: int | None = None
+    photo: str | None = None
     created_at: datetime
 
     class Config:

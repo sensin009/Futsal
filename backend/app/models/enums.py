@@ -26,3 +26,11 @@ class PlayerPosition(str, enum.Enum):
     midfielder = "midfielder"
     attacker = "attacker"
 
+
+class MatchEventType(str, enum.Enum):
+    goal = "goal"
+    assist = "assist"
+    yellow_card = "yellow_card"
+    red_card = "red_card"
+    foul = "foul"
+

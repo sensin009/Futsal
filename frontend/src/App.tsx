@@ -27,6 +27,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { PlayersPage } from "./pages/PlayersPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { SchedulePage } from "./pages/SchedulePage";
+import { MatchDetailsPage } from "./pages/MatchDetailsPage";
 
 function RequireAuth({ children }: { children: ReactElement }) {
   const { user, loading } = useAuth();
@@ -58,6 +59,7 @@ export default function App() {
         <Route path="about" element={<AboutPage />} />
         <Route path="players" element={<PlayersPage />} />
         <Route path="schedule" element={<SchedulePage />} />
+        <Route path="matches/:id" element={<MatchDetailsPage />} />
         <Route path="leaderboard" element={<LeaderboardPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />

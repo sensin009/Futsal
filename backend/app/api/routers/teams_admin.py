@@ -57,3 +57,10 @@ def delete_team(team_id: int, db: Session = Depends(get_db), _: User = Depends(r
     db.commit()
     return {"ok": True}
 
+
+@router.get("/{team_id}/players", response_model=list[dict])
+def get_team_players(team_id: int, db: Session = Depends(get_db), _: User = Depends(require_admin)):
+    from app.models.player_profile import PlayerProfile
+    rows = db.query(User).join(PlayerProfile).filter(PlayerProfile.team_id == team_id).all()
+    return [{"id": u.id, "name": u.name, "photo": u.photo} for u in rows]
+

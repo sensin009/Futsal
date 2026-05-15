@@ -15,11 +15,13 @@ from app.api.routers import (
     teams_admin,
     teams_public,
     users_admin,
+    uploads,
 )
 
 api_router = APIRouter(prefix="/api")
 
 api_router.include_router(auth.router)
+api_router.include_router(uploads.router)
 
 api_router.include_router(players_public.router)
 api_router.include_router(matches_public.router)

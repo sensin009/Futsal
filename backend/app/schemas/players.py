@@ -13,6 +13,8 @@ class PlayerProfileOut(BaseModel):
     phone: str | None
     position: PlayerPosition | None
     jersey_number: int | None
+    team_id: int | None
+    team_name: str | None = None
 
     total_goals: int
     total_assists: int

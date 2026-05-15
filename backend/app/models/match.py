@@ -37,3 +37,7 @@ class Match(Base):
         "MatchPlayerScore", back_populates="match", cascade="all, delete-orphan"
     )
 
+    events = relationship(
+        "MatchEvent", back_populates="match", cascade="all, delete-orphan", order_by="MatchEvent.minute"
+    )
+

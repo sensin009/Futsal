@@ -49,3 +49,29 @@ def list_matches(db: Session = Depends(get_db), status: str | None = None):
         for m, na, nb in rows
     ]
 
+
+@router.get("/{match_id}")
+def get_match_details(match_id: int, db: Session = Depends(get_db)):
+    Ta = aliased(Team)
+    Tb = aliased(Team)
+    row = (
+        db.query(Match, Ta.team_name.label("team_a_name"), Tb.team_name.label("team_b_name"))
+        .join(Ta, Ta.id == Match.team_a_id)
+        .join(Tb, Tb.id == Match.team_b_id)
+        .filter(Match.id == match_id)
+        .one_or_none()
+    )
+    if not row:
+        return None
+    
+    match, na, nb = row
+    
+    # Manually populate names for MatchOut if using dict or property
+    # Since we are returning a dict that matches MatchOut schema
+    return {
+        **match.__dict__,
+        "team_a_name": na,
+        "team_b_name": nb,
+        "events": match.events
+    }
+
